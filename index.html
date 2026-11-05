@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Deep Online Center – Farmer Card Print Tool</title>
+<style>
+:root{--green:#176b43;--gold:#d8b15b;--ink:#20352a}
+*{box-sizing:border-box}body{margin:0;background:#eef3ef;color:#24332a;font-family:Arial,"Noto Sans Devanagari",sans-serif}
+header{background:linear-gradient(110deg,#155d3c,#27875a);color:white;padding:20px 24px}
+header h1{margin:0;font-size:24px}header p{margin:6px 0 0;font-size:14px}
+main{max-width:1120px;margin:22px auto;padding:0 16px;display:grid;grid-template-columns:minmax(280px,390px) 1fr;gap:20px}
+.panel{background:white;border-radius:14px;padding:18px;box-shadow:0 4px 18px #173d2410}
+h2{font-size:18px;margin:0 0 14px;color:var(--green)}label{display:block;font-size:13px;font-weight:bold;margin:12px 0 5px}
+input,select,textarea{width:100%;padding:10px;border:1px solid #ccd8ce;border-radius:8px;font:inherit;background:#fff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}.hint{font-size:12px;line-height:1.5;color:#66756b}
+button{border:0;border-radius:9px;padding:11px 14px;font-weight:bold;cursor:pointer}
+.primary{background:var(--green);color:white}.secondary{background:#e6eee8;color:#174b31}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.preview-wrap{background:#e8eee9;border-radius:12px;padding:18px;display:flex;justify-content:center;align-items:flex-start;overflow:auto}
+.card{width:680px;max-width:100%;aspect-ratio:1.586;background:#fff;border:2px solid #176b43;border-radius:12px;overflow:hidden;position:relative;box-shadow:0 5px 20px #0002;color:#1d3225}
+.cardhead{height:24%;background:#176b43;color:#fff;display:flex;align-items:center;padding:12px 18px;gap:14px}
+.logo{width:56px;height:56px;border:2px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:10px;flex-shrink:0}
+.cardhead h3{font-size:clamp(12px,2vw,19px);margin:0 0 5px}.cardhead p{margin:0;font-size:clamp(9px,1.2vw,12px)}
+.cardbody{padding:14px 18px;display:grid;grid-template-columns:1fr 118px;gap:12px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;align-content:start}
+.field{border-bottom:1px solid #d7e4d9;padding-bottom:5px;min-width:0}.field small{display:block;color:#5b7061;font-size:10px;margin-bottom:4px}.field b{font-size:clamp(10px,1.4vw,14px);overflow-wrap:anywhere}
+.photo{height:120px;border:1px dashed #7e9b86;border-radius:5px;display:flex;align-items:center;justify-content:center;text-align:center;color:#718476;font-size:12px;padding:5px}
+.idbox{grid-column:1/-1;background:#e9f4ec;border:1px solid #b6d7bf;border-radius:7px;padding:7px 10px}.idbox small{display:block;font-size:10px;color:#42654d}.idbox strong{font-size:clamp(13px,2vw,20px);letter-spacing:1px}
+.cardfoot{position:absolute;bottom:0;left:0;right:0;background:#f3f7f3;border-top:1px solid #c8ddcd;padding:6px 14px;font-size:9px;display:flex;justify-content:space-between;gap:10px}
+.notice{background:#fff8e7;border:1px solid #f0d68e;padding:11px;border-radius:9px;font-size:12px;line-height:1.5;margin-top:12px}
+@media(max-width:850px){main{grid-template-columns:1fr}.card{width:680px;max-width:none}.preview-wrap{justify-content:flex-start}}
+@media print{body{background:#fff}header,main>.panel:first-child,.preview-title,.notice{display:none!important}main{display:block;margin:0;padding:0;max-width:none}.panel{box-shadow:none;padding:0}.preview-wrap{background:#fff;padding:0;overflow:visible}.card{width:85.6mm;height:54mm;max-width:none;border-radius:2mm;box-shadow:none;break-inside:avoid}.cardhead{height:24%;padding:2mm 3mm;gap:2mm}.logo{width:11mm;height:11mm;font-size:5pt}.cardhead h3{font-size:9pt}.cardhead p{font-size:5pt}.cardbody{padding:2mm 3mm;grid-template-columns:1fr 17mm;gap:2mm}.fields{gap:2mm 3mm}.field small,.idbox small{font-size:5pt}.field b{font-size:7pt}.photo{height:17mm;font-size:6pt}.idbox{padding:1mm 2mm}.idbox strong{font-size:10pt}.cardfoot{font-size:5pt;padding:1mm 2mm}}
+</style>
+</head>
+<body>
+<header><h1>Deep Online Center</h1><p>Farmer Details → Print Layout (डेमो कार्ड टूल)</p></header>
+<main>
+<section class="panel">
+<h2>किसान की जानकारी भरें</h2>
+<p class="hint">केवल किसान की अनुमति से जानकारी भरें। यह टूल आपके दिए विवरण से सामान्य प्रिंट लेआउट बनाता है; यह सरकारी पोर्टल से रिकॉर्ड नहीं खोजता और न ही सरकारी Farmer ID जारी करता है।</p>
+<div class="grid">
+<div><label>किसान का नाम</label><input id="name" placeholder="पूरा नाम"></div>
+<div><label>पिता/पति का नाम</label><input id="father" placeholder="नाम"></div>
+<div><label>जन्मतिथि</label><input id="dob" placeholder="DD/MM/YYYY"></div>
+<div><label>लिंग</label><select id="gender"><option>पुरुष</option><option>महिला</option><option>अन्य</option></select></div>
+<div><label>गाँव</label><input id="village" placeholder="गाँव"></div>
+<div><label>तहसील / ब्लॉक</label><input id="tehsil" placeholder="तहसील"></div>
+<div><label>जिला</label><input id="district" placeholder="जिला"></div>
+<div><label>राज्य</label><input id="state" value="छत्तीसगढ़"></div>
+<div><label>Farmer ID (आधिकारिक)</label><input id="farmerid" placeholder="असली ID भरें"></div>
+<div><label>जमीन / खसरा विवरण (वैकल्पिक)</label><input id="land" placeholder="जैसे खसरा नंबर"></div>
+</div>
+<label>किसान की फोटो (वैकल्पिक)</label><input id="photoInput" type="file" accept="image/*">
+<div class="actions"><button class="primary" id="update">कार्ड अपडेट करें</button><button class="secondary" id="print">प्रिंट / PDF सेव करें</button><button class="secondary" id="clear">फॉर्म साफ करें</button></div>
+<div class="notice"><b>जरूरी:</b> इस डिज़ाइन को आधिकारिक सरकारी कार्ड समझकर इस्तेमाल न करें। सरकारी लोगो/मुहर की नकल नहीं की गई है। आधिकारिक कार्ड चाहिए तो AgriStack/अधिकृत पोर्टल से जारी PDF ही डाउनलोड करें। आधार नंबर यहाँ न भरें; इस डेमो को आपके ब्राउज़र में स्थानीय रूप से चलाने के लिए बनाया गया है।</div>
+</section>
+<section class="panel">
+<h2 class="preview-title">कार्ड का प्रीव्यू</h2>
+<div class="preview-wrap"><article class="card" id="card">
+<div class="cardhead"><div class="logo">FARMER<br>PROFILE</div><div><h3>किसान विवरण कार्ड</h3><p>FARMER DETAILS • SAMPLE PRINT LAYOUT</p></div></div>
+<div class="cardbody"><div class="fields">
+<div class="field"><small>किसान का नाम / Name</small><b id="p-name">—</b></div>
+<div class="field"><small>पिता/पति का नाम</small><b id="p-father">—</b></div>
+<div class="field"><small>जन्मतिथि / DOB</small><b id="p-dob">—</b></div>
+<div class="field"><small>लिंग / Gender</small><b id="p-gender">पुरुष</b></div>
+<div class="field"><small>गाँव / Village</small><b id="p-village">—</b></div>
+<div class="field"><small>तहसील / ब्लॉक</small><b id="p-tehsil">—</b></div>
+<div class="field"><small>जिला / District</small><b id="p-district">—</b></div>
+<div class="field"><small>राज्य / State</small><b id="p-state">छत्तीसगढ़</b></div>
+<div class="idbox"><small>Farmer ID (किसान द्वारा उपलब्ध कराई गई आधिकारिक ID)</small><strong id="p-farmerid">—</strong></div>
+<div class="field"><small>जमीन / खसरा विवरण</small><b id="p-land">—</b></div>
+</div><div class="photo" id="photoBox">फोटो<br>(वैकल्पिक)</div></div>
+<div class="cardfoot"><span>DEMO / निजी विवरण प्रिंट</span><span>यह सरकारी पहचान-पत्र नहीं है</span></div>
+</article></div>
+<p class="hint">प्रिंट बटन पर क्लिक करके Print dialog में “Save as PDF” चुन सकते हैं। PVC कार्ड के लिए प्रिंट सेटिंग में वास्तविक आकार/स्केल जाँच लें।</p>
+</section>
+</main>
+<script>
+const ids=['name','father','dob','gender','village','tehsil','district','state','farmerid','land'];
+function update(){for(const id of ids){const e=document.getElementById(id),p=document.getElementById('p-'+id);if(p)p.textContent=e.value.trim()||'—';}}
+document.getElementById('update').onclick=update;
+document.getElementById('print').onclick=()=>{update();window.print()};
+document.getElementById('clear').onclick=()=>{ids.forEach(id=>{const e=document.getElementById(id);if(id==='state')e.value='छत्तीसगढ़';else if(id==='gender')e.value='पुरुष';else e.value=''});document.getElementById('photoInput').value='';document.getElementById('photoBox').textContent='फोटो (वैकल्पिक)';update()};
+document.getElementById('photoInput').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{document.getElementById('photoBox').innerHTML='';const im=document.createElement('img');im.src=r.result;im.style.width='100%';im.style.height='100%';im.style.objectFit='cover';document.getElementById('photoBox').appendChild(im)};r.readAsDataURL(f)});
+update();
+</script>
+</body></html>
